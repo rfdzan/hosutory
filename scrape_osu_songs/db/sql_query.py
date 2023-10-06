@@ -9,8 +9,8 @@ def connect() -> sqlite3.Connection:
     return sqlite3.connect(DB_FILE)
 
 
-def create_tables():
-    Q_CREATE_TABLES = """CREATE TABLE IF NOT EXISTS songs(
+def create_tables() -> None:
+    q_create_tables = """CREATE TABLE IF NOT EXISTS songs(
     id INTEGER PRIMARY KEY,
     artist TEXT,
     title TEXT,
@@ -20,11 +20,11 @@ def create_tables():
 
     with connect() as conn:
         cursor = conn.cursor()
-        cursor.execute(Q_CREATE_TABLES)
+        cursor.execute(q_create_tables)
 
 
-def insert_into_db(data: list[dict]):
-    Q_INSERT_INTO_SONGS = """INSERT OR IGNORE INTO songs(
+def insert_into_db(data: list[dict]) -> None:
+    q_insert_into_songs = """INSERT OR IGNORE INTO songs(
     artist,
     title,
     preview
@@ -36,7 +36,7 @@ def insert_into_db(data: list[dict]):
     """
     with connect() as conn:
         cursor = conn.cursor()
-        cursor.executemany(Q_INSERT_INTO_SONGS, data)
+        cursor.executemany(q_insert_into_songs, data)
         conn.commit()
 
 
