@@ -17,7 +17,7 @@ def make_request(offset: int) -> httpx.Response:
     return response.json()
 
 
-def save_song():
+def save_song() -> None:
     for offset in range(0, 3900, 100):  # total number of song is 3889
         response = make_request(offset)
         with open(PROJ_DIR.joinpath(f"songs{int(offset / 100)}.json"), "w") as file:
