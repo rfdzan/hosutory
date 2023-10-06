@@ -1,30 +1,30 @@
 import json
 from pathlib import Path, PurePath
-
+from collections.abc import Generator
 import httpx
 from tqdm import tqdm
 
-from db.sql_query import insert_into_db
+from .db.sql_query import insert_into_db
 
 PROJ_DIR = PurePath(__file__).parents[0]
 HEADERS = PROJ_DIR.joinpath("headers.json")
 SONG_DIR = PROJ_DIR.joinpath("songs")
 
 
-def make_request(offset: int):
+def make_request(offset: int) -> httpx.Response:
     url = f"https://osu.ppy.sh/users/4836880/beatmapsets/most_played?limit=100&offset={offset}"
     response = httpx.get(url)
     return response.json()
 
 
 def save_song():
-    for offset in range(3800, 5100, 100):
+    for offset in range(0, 3900, 100):  # total number of song is 3889
         response = make_request(offset)
         with open(PROJ_DIR.joinpath(f"songs{int(offset / 100)}.json"), "w") as file:
             json.dump(response, file)
 
 
-def parse():
+def parse() -> Generator[dict[str], None, None]:
     for file in tqdm(Path(SONG_DIR).iterdir()):
         with open(SONG_DIR.joinpath(file)) as file:
             song = json.load(file)
@@ -36,7 +36,7 @@ def parse():
             yield {"artist": artist, "title": title, "preview": preview}
 
 
-def store_songs():
+def store_songs() -> None:
     complete_data = [data for data in parse()]
     insert_into_db(complete_data)
 

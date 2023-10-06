@@ -9,7 +9,7 @@ def connect() -> sqlite3.Connection:
     return sqlite3.connect(DB_FILE)
 
 
-def create_tables():
+def create_tables() -> None:
     Q_CREATE_TABLES = """CREATE TABLE IF NOT EXISTS songs(
     id INTEGER PRIMARY KEY,
     artist TEXT,
@@ -23,7 +23,7 @@ def create_tables():
         cursor.execute(Q_CREATE_TABLES)
 
 
-def insert_into_db(data: list[dict]):
+def insert_into_db(data: list[dict]) -> None:
     Q_INSERT_INTO_SONGS = """INSERT OR IGNORE INTO songs(
     artist,
     title,
