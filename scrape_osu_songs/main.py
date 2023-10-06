@@ -12,7 +12,7 @@ HEADERS = PROJ_DIR.joinpath("headers.json")
 SONG_DIR = PROJ_DIR.joinpath("songs")
 
 
-def make_request(offset: int) -> httpx.Response:
+def make_request(offset: int) -> list[dict]:
     url = f"https://osu.ppy.sh/users/4836880/beatmapsets/most_played?limit=100&offset={offset}"
     response = httpx.get(url)
     return response.json()
