@@ -1,7 +1,10 @@
 import json
-from pathlib import PurePath, Path
-import httpx
+from pathlib import Path, PurePath
 
+import httpx
+from tqdm import tqdm
+
+from db.sql_query import insert_into_db
 
 PROJ_DIR = PurePath(__file__).parents[0]
 HEADERS = PROJ_DIR.joinpath("headers.json")
@@ -22,11 +25,21 @@ def save_song():
 
 
 def parse():
-    with open(SONG_DIR.joinpath("songs38.json")) as file:
-        read = json.load(file)
-    print(len(read))
+    for file in tqdm(Path(SONG_DIR).iterdir()):
+        with open(SONG_DIR.joinpath(file)) as file:
+            song = json.load(file)
+        for item in song:
+            beatmapset = item.get("beatmapset")
+            artist = beatmapset.get("artist")
+            title = beatmapset.get("title")
+            preview = beatmapset.get("preview_url")
+            yield {"artist": artist, "title": title, "preview": preview}
+
+
+def store_songs():
+    complete_data = [data for data in parse()]
+    insert_into_db(complete_data)
 
 
 if __name__ == "__main__":
-    parse()
-    pass
+    store_songs()
