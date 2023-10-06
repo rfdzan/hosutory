@@ -1,6 +1,7 @@
 import json
-from pathlib import Path, PurePath
 from collections.abc import Generator
+from pathlib import Path, PurePath
+
 import httpx
 from tqdm import tqdm
 
