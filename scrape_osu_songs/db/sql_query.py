@@ -13,8 +13,8 @@ def create_tables() -> None:
     q_create_tables = """CREATE TABLE IF NOT EXISTS songs(
     id INTEGER PRIMARY KEY,
     artist TEXT,
-    title TEXT UNIQUE,
-    preview TEXT
+    title TEXT,
+    preview TEXT UNIQUE
     )STRICT
     """
 
