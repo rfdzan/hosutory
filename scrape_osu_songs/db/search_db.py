@@ -1,5 +1,6 @@
-from .sql_query import connect
 from tabulate import tabulate
+
+from .sql_query import connect
 
 
 def raise_error() -> None:
