@@ -13,7 +13,7 @@ def create_tables() -> None:
     q_create_tables = """CREATE TABLE IF NOT EXISTS songs(
     id INTEGER PRIMARY KEY,
     artist TEXT,
-    title TEXT,
+    title TEXT UNIQUE,
     preview TEXT
     )STRICT
     """
@@ -38,7 +38,3 @@ def insert_into_db(data: list[dict]) -> None:
         cursor = conn.cursor()
         cursor.executemany(q_insert_into_songs, data)
         conn.commit()
-
-
-if __name__ == "__main__":
-    pass
