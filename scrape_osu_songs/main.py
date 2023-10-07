@@ -5,7 +5,7 @@ from pathlib import Path, PurePath
 import httpx
 from tqdm import tqdm
 
-from .db.sql_query import insert_into_db
+from db.sql_query import insert_into_db
 
 PROJ_DIR = PurePath(__file__).parents[0]
 HEADERS = PROJ_DIR.joinpath("headers.json")
@@ -14,7 +14,9 @@ SONG_DIR = PROJ_DIR.joinpath("songs")
 
 def make_request(offset: int) -> list[dict]:
     url = f"https://osu.ppy.sh/users/4836880/beatmapsets/most_played?limit=100&offset={offset}"
-    response = httpx.get(url)
+    with open(HEADERS) as file:
+        header = json.load(file)
+    response = httpx.get(url, headers=header)
     return response.json()
 
 
