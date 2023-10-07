@@ -35,7 +35,7 @@ def save_song(user_id: int, start: int, stop: int) -> None:
     user_id_folder = SONG_DIR.joinpath(user_id)
     if not Path(user_id_folder).exists():
         Path(user_id_folder).mkdir()
-    for offset in range(start, stop, 100):  # total number of song is 3889
+    for offset in range(start, stop, 100):
         response = make_request(user_id, offset)
         with open(
             user_id_folder.joinpath(f"songs{int(offset / 100)}.json"), "w"
