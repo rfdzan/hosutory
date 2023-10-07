@@ -22,7 +22,7 @@ def make_request(user_id: int, offset: int) -> list[dict]:
             response = httpx.get(url, headers=header)
             return response.json()
         except (httpx.TimeoutException, json.decoder.JSONDecodeError):
-            for i in tqdm(range(30, 0)):
+            for i in range(30, 0):
                 print(
                     f"encountered an error in make_request(), retrying in {i} seconds",
                     end="\r",
@@ -35,7 +35,7 @@ def save_song(user_id: int, start: int, stop: int) -> None:
     user_id_folder = SONG_DIR.joinpath(user_id)
     if not Path(user_id_folder).exists():
         Path(user_id_folder).mkdir()
-    for offset in range(start, stop, 100):
+    for offset in tqdm(range(start, stop + 100, 100)):
         response = make_request(user_id, offset)
         with open(
             user_id_folder.joinpath(f"songs{int(offset / 100)}.json"), "w"
@@ -47,14 +47,20 @@ def parse(user_id: int) -> Generator[dict[str], None, None]:
     user_id = str(user_id)
     user_id_folder = SONG_DIR.joinpath(user_id)
     for file in tqdm(Path(user_id_folder).iterdir()):
-        with open(user_id_folder.joinpath(file)) as file:
+        with open(user_id_folder.joinpath(file), encoding="utf-8") as file:
             song = json.load(file)
         for item in song:
             beatmapset = item.get("beatmapset")
             artist = beatmapset.get("artist")
             title = beatmapset.get("title")
             preview = beatmapset.get("preview_url")
-            yield {"artist": artist, "title": title, "preview": preview}
+            source = beatmapset.get("source")
+            yield {
+                "artist": artist,
+                "title": title,
+                "preview": preview,
+                "source": source,
+            }
 
 
 def store_songs(user_id: int) -> None:

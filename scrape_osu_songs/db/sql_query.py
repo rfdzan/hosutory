@@ -14,7 +14,8 @@ def create_tables() -> None:
     id INTEGER PRIMARY KEY,
     artist TEXT,
     title TEXT,
-    preview TEXT UNIQUE
+    preview TEXT UNIQUE,
+    source TEXT
     )STRICT
     """
 
@@ -27,11 +28,13 @@ def insert_into_db(data: list[dict]) -> None:
     q_insert_into_songs = """INSERT OR IGNORE INTO songs(
     artist,
     title,
-    preview
+    preview,
+    source
     ) VALUES(
     :artist,
     :title,
-    :preview
+    :preview,
+    :source
     )
     """
     with connect() as conn:
