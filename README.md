@@ -24,7 +24,7 @@ poetry install
 
 **!!Navigate to `PROJECT_ROOT/scrape_osu_songs/` and create a folder named `songs`!!**
 
-Scraping is a two step process:
+Scraping is a two step process:  
 In `./scrape_osu_songs/main.py`:
 ```py
 if __name__ == "__main__":
@@ -36,10 +36,10 @@ if __name__ == "__main__":
 
 ## Example:
 
-**user_id**:
+**user_id**:  
 ![ID](https://i.imgur.com/VhuVDSG.png)
 
-**index:**
+**index:**  
 ![index](https://i.imgur.com/9L2MyWi.png)
 
 Based on the information above, a straightforward way is to simply write:
@@ -64,10 +64,10 @@ a simple GUI is provided to view and query the data.
 ### The GUI
 ![GUI](https://i.imgur.com/JGVl5sc.png)
 ### How to use:
-> 1. Type in the `artist`, `title` or `source` (where the song originates from, e.g. SOUND VOLTEX) inside the input field.
-> 2. Choose what you want to seach for: `Artist`, `Title`, or `Source`
-> 3. Choose by what you want to sort the data with: `Artist` or `Title`.
-> 3. Press `Search` or simply `Enter`.
+1. Type in the `artist`, `title` or `source` (where the song originates from, e.g. SOUND VOLTEX) inside the input field.
+2. Choose what you want to seach for: `Artist`, `Title`, or `Source`
+3. Choose by what you want to sort the data with: `Artist` or `Title`.
+3. Press `Search` or simply `Enter`.
 
 The words are kinda weird but let me explain.
 
@@ -83,7 +83,7 @@ However, if the `Exact?` box is checked, it will only show you **exact** matches
 `Clear` simply clears the input field.
 
 ### The context menu (still being worked on):
-![Context manu](https://i.imgur.com/cBDoWxH.png)
+![Context manu](https://i.imgur.com/cBDoWxH.png)  
 You can right-click on any entry, gives you (currently) 1 handy option, `Preview`.
 
 `Preview` simply opens the browser and gives you a 10 second sample of the song.
