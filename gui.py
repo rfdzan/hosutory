@@ -37,9 +37,9 @@ def right_Col():
         sG.Radio("Source", 1, key="source"),
     ]
     text_like = [sG.Text("Like:")]
-    search_box = [sG.InputText("Miku", key="-INPUT-")]
+    search_box = [sG.InputText("", key="-INPUT-", do_not_clear=False)]
     button_search = [
-        sG.Button("Search", mouseover_colors="white"),
+        sG.Button("Search", mouseover_colors="white", bind_return_key=True),
         sG.Button("Clear", mouseover_colors="white"),
     ]
     progress = [sG.Text(text="", key="prog")]
