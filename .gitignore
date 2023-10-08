@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 .idea/
 scrape_osu_songs/songs/
+.ruff_cache/
 
 # C extensions
 *.so
