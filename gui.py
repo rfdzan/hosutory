@@ -35,16 +35,30 @@ def right_Col():
         sG.Radio("Artist", 1, default=True, key="artist"),
         sG.Radio("Title", 1, key="title"),
         sG.Radio("Source", 1, key="source"),
+        sG.Checkbox("Exact?", default=False, key="-EXACT-"),
+    ]
+    sort_radios = [
+        sG.Text("Sort by:"),
+        sG.Radio("Artist", 2, key="sort_artist"),
+        sG.Radio("Title", 2, default=True, key="sort_title"),
     ]
     text_like = [sG.Text("Like:")]
-    search_box = [sG.InputText("", key="-INPUT-", do_not_clear=False)]
+    search_box = [sG.InputText("", key="-INPUT-")]
     button_search = [
         sG.Button("Search", mouseover_colors="white", bind_return_key=True),
         sG.Button("Clear", mouseover_colors="white"),
     ]
     progress = [sG.Text(text="", key="prog")]
 
-    return text_where, choice_radios, text_like, search_box, button_search, progress
+    return (
+        text_where,
+        choice_radios,
+        text_like,
+        search_box,
+        button_search,
+        sort_radios,
+        progress,
+    )
 
 
 def main():
@@ -59,6 +73,7 @@ def main():
         text_like,
         search_box,
         button_search,
+        sort_radios,
         progress,
     ) = right_Col()
     # layouts
@@ -66,6 +81,7 @@ def main():
     layout_r = [
         text_where,
         choice_radios,
+        sort_radios,
         text_like,
         search_box,
         button_search,
@@ -75,6 +91,7 @@ def main():
     layout = [
         [
             sG.Col(layout_l, vertical_alignment="Top"),
+            sG.VerticalSeparator(color="white"),
             sG.Col(layout_r, vertical_alignment="Top"),
         ]
     ]
@@ -85,6 +102,7 @@ def main():
         event, values = window.read()
         if event == sG.WIN_CLOSED:
             break
+
         if event == "Search":
             data = query_the_db(values)
             result = []
@@ -92,12 +110,13 @@ def main():
                 result.append(item)
             window["-TABLE-"].update(values=result)
             window["prog"].update(value=f"Loaded {len(result)} songs.")
+
         if event == "Clear":
-            window["-TABLE-"].update(values=["" for _ in range(4)])
+            window["-INPUT-"].update(value="")
+
         if isinstance(event, tuple):
             if event[0] == "-TABLE-":
                 index = event[2]
-
         if event in ("Copy::rCopy", "Copy Munix::rMunix"):
             copy_prefix = {"Copy::rCopy": "", "Copy Munix::rMunix": "+p "}
             try:
