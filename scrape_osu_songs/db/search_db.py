@@ -1,5 +1,3 @@
-from tabulate import tabulate
-
 from .sql_query import connect
 
 
@@ -19,14 +17,22 @@ def sanitize_input():
     return choice, by, like
 
 
-def query_the_db():
-    select, by, like = sanitize_input()
-    header = select
-    q_select = f"SELECT artist, title, preview, source FROM songs WHERE {by} LIKE :like ORDER BY title"
+def query_the_db(values: dict[str, str]):
+    header = ("artist", "title", "preview", "source")
+    for key, value in values.items():
+        if key in header:
+            if value:
+                by = key
+                break
+    like = values.get("-INPUT-")
+
+    q_select = (
+        f"SELECT artist, title, preview, source FROM songs "
+        f"WHERE {by} LIKE :like ORDER BY title"
+    )
 
     with connect() as conn:
         cursor = conn.cursor()
         cursor.execute(q_select, {"like": f"%{like}%"})
-        table = [(data[0], data[1], f"https:{data[2]}", data[3]) for data in cursor]
-
-    print(tabulate(table, headers=header, tablefmt="grid"))
+        table = [[data[0], data[1], f"https:{data[2]}", data[3]] for data in cursor]
+    return table
