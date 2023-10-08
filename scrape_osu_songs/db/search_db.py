@@ -1,4 +1,5 @@
 from .sql_query import connect
+from collections.abc import Generator
 
 
 def raise_error() -> None:
@@ -17,7 +18,7 @@ def sanitize_input():
     return choice, by, like
 
 
-def query_the_db(values: dict[str, str]):
+def query_the_db(values: dict[str, str]) -> Generator[list[str]]:
     header = ("artist", "title", "preview", "source")
     for key, value in values.items():
         if key in header:
@@ -34,5 +35,5 @@ def query_the_db(values: dict[str, str]):
     with connect() as conn:
         cursor = conn.cursor()
         cursor.execute(q_select, {"like": f"%{like}%"})
-        table = [[data[0], data[1], f"https:{data[2]}", data[3]] for data in cursor]
-    return table
+        for data in cursor:
+            yield [data[0], data[1], data[3], f"https:{data[2]}"]
