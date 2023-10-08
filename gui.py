@@ -19,7 +19,10 @@ def left_Col():
             headings=["artist", "title", "source"],
             enable_click_events=True,
             right_click_selects=True,
-            right_click_menu=["&Right", ["Copy::rCopy", "Preview::rPreview"]],
+            right_click_menu=[
+                "&Right",
+                ["Copy::rCopy", "Copy Munix::rMunix", "Preview::rPreview"],
+            ],
             key="-TABLE-",
         )
     ]
@@ -94,9 +97,14 @@ def main():
         if isinstance(event, tuple):
             if event[0] == "-TABLE-":
                 index = event[2]
-        if event == "Copy::rCopy":
+
+        if event in ("Copy::rCopy", "Copy Munix::rMunix"):
+            copy_prefix = {"Copy::rCopy": "", "Copy Munix::rMunix": "+p "}
             try:
-                to_copy = f"{result[index[0]][0]} {result[index[0]][1]}"
+                to_copy = (
+                    f"{copy_prefix.get(event)}"
+                    f"{result[index[0]][0]} {result[index[0]][1]}"
+                )
                 run(["clip.exe"], input=to_copy.encode("utf-8"))
             except UnboundLocalError:
                 sG.popup("No track selected!")
