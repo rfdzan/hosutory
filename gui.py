@@ -37,7 +37,9 @@ def right_Col():
         sG.Button("Search", mouseover_colors="white"),
         sG.Button("Clear", mouseover_colors="white"),
     ]
-    return text_where, choice_radios, text_like, search_box, button_search
+    progress = [sG.Text(text="", key="prog")]
+
+    return text_where, choice_radios, text_like, search_box, button_search, progress
 
 
 def main():
@@ -46,10 +48,24 @@ def main():
     # left_window
     text_result, table = left_Col()
     # right_window
-    text_where, choice_radios, text_like, search_box, button_search = right_Col()
+    (
+        text_where,
+        choice_radios,
+        text_like,
+        search_box,
+        button_search,
+        progress,
+    ) = right_Col()
     # layouts
     layout_l = [text_result, table]
-    layout_r = [text_where, choice_radios, text_like, search_box, button_search]
+    layout_r = [
+        text_where,
+        choice_radios,
+        text_like,
+        search_box,
+        button_search,
+        progress,
+    ]
 
     layout = [
         [
@@ -70,6 +86,7 @@ def main():
             for item in data:
                 result.append(item)
             window["-TABLE-"].update(values=result)
+            window["prog"].update(value=f"Loaded {len(result)} songs.")
         if event == "Clear":
             window["-TABLE-"].update(values=["" for _ in range(4)])
         if isinstance(event, tuple):
