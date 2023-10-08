@@ -19,22 +19,30 @@ def sanitize_input():
     return choice, by, like
 
 
-def query_the_db(values: dict[str, str]) -> Generator[list[str]]:
-    header = ("artist", "title", "preview", "source")
+def query_the_db(values: dict[str, str | bool]) -> Generator[list[str]]:
+    header = ("artist", "title", "preview", "source", "sort_artist", "sort_title")
     for key, value in values.items():
         if key in header:
-            if value:
+            if value and "sort" in key:
+                sort = key.split("_")[1]
+            elif value:
                 by = key
-                break
     like = values.get("-INPUT-")
-
-    q_select = (
-        f"SELECT artist, title, preview, source FROM songs "
-        f"WHERE {by} LIKE :like ORDER BY title"
-    )
+    if values.get("-EXACT-"):
+        q_select = (
+            f"SELECT artist, title, preview, source FROM songs "
+            f"WHERE {by} = :like ORDER BY {sort}"
+        )
+        like_query = like
+    else:
+        q_select = (
+            f"SELECT artist, title, preview, source FROM songs "
+            f"WHERE {by} LIKE :like ORDER BY {sort}"
+        )
+        like_query = f"%{like}%"
 
     with connect() as conn:
         cursor = conn.cursor()
-        cursor.execute(q_select, {"like": f"%{like}%"})
+        cursor.execute(q_select, {"like": like_query})
         for data in cursor:
             yield [data[0], data[1], data[3], f"https:{data[2]}"]
