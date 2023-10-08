@@ -109,6 +109,17 @@ files = [
 ]
 
 [[package]]
+name = "pysimplegui"
+version = "4.60.5"
+description = "Python GUIs for Humans. Launched in 2018. It's 2022 & PySimpleGUI is an ACTIVE & supported project. Super-simple to create custom GUI's. 325+ Demo programs & Cookbook for rapid start. Extensive documentation. Main docs at www.PySimpleGUI.org. Fun & your success are the focus. Examples using Machine Learning (GUI, OpenCV Integration), Rainmeter Style Desktop Widgets, Matplotlib + Pyplot, PIL support, add GUI to command line scripts, PDF & Image Viewers. Great for beginners & advanced GUI programmers."
+optional = false
+python-versions = "*"
+files = [
+    {file = "PySimpleGUI-4.60.5-py3-none-any.whl", hash = "sha256:004f33311ee685a5287fad54f500f7290b40d7c806044e478b1384f85dedce64"},
+    {file = "PySimpleGUI-4.60.5.tar.gz", hash = "sha256:31014d1cc5eef1373d7e93564ff2604662645cc774a939b1f01aa253e7f9d78b"},
+]
+
+[[package]]
 name = "sniffio"
 version = "1.3.0"
 description = "Sniff out which async library your code is running under"
@@ -156,4 +167,4 @@ telegram = ["requests"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "c7a6caedc15206ad3a403bbfdf0404b6f15d82cb3dce341e2838ebe399e91a4f"
+content-hash = "0f946cf3d019aae7ac421c88f068ebab34480fef321beacb5bf8d263eeb9b5e8"
