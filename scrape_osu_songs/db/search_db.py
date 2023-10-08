@@ -1,5 +1,6 @@
-from .sql_query import connect
 from collections.abc import Generator
+
+from .sql_query import connect
 
 
 def raise_error() -> None:

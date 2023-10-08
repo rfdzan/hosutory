@@ -1,6 +1,8 @@
-import PySimpleGUI as sG
-from webbrowser import open
 from subprocess import run
+from webbrowser import open
+
+import PySimpleGUI as sG
+
 from scrape_osu_songs.db.search_db import query_the_db
 
 
