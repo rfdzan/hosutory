@@ -1,12 +1,22 @@
 import PySimpleGUI as sG
 from scrape_osu_songs.db.search_db import query_the_db
 
+
 def main():
     sG.theme("SystemDefaultForReal")
     sG.Titlebar("Search songs", background_color="Black")
     # left_window
     text_result = [sG.Text("Result:")]
-    table = [sG.Table(values=["" for _ in range(4)], expand_x=True, num_rows=10, justification="left" ,headings=["artist", "title", "preview", "source"],key="-TABLE-")]
+    table = [
+        sG.Table(
+            values=["" for _ in range(4)],
+            expand_x=True,
+            num_rows=10,
+            justification="left",
+            headings=["artist", "title", "preview", "source"],
+            key="-TABLE-",
+        )
+    ]
     # right_window
     text_where = [sG.Text("Where:")]
     choice_radios = [
@@ -25,7 +35,12 @@ def main():
     layout_l = [text_result, table]
     layout_r = [text_where, choice_radios, text_like, search_box, button_search]
 
-    layout = [[sG.Col(layout_l, vertical_alignment="Top"), sG.Col(layout_r, vertical_alignment="Top")]]
+    layout = [
+        [
+            sG.Col(layout_l, vertical_alignment="Top"),
+            sG.Col(layout_r, vertical_alignment="Top"),
+        ]
+    ]
 
     window = sG.Window("Search", layout, finalize=True, resizable=True)
 
