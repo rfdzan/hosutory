@@ -25,7 +25,10 @@ def make_request(user_id: str, offset: int) -> list[dict]:
     while True:
         try:
             response = httpx.get(url, headers=header)
-            return response.json()
+            for data in response.json():
+                if data == "error":
+                    raise ValueError(f"No data for ID: {user_id}")
+                return response.json()
         except (httpx.TimeoutException, json.decoder.JSONDecodeError):
             for i in range(30, 0):
                 print(
