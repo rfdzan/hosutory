@@ -23,7 +23,7 @@ poetry install
 *Uses SQLite3*
 1. Double click `./run_scrape.py`
 ### The scrape GUI
-![scrape gui](https://i.imgur.com/x6OHJz0.png)
+![scrape gui](https://i.imgur.com/x6OHJz0.png)  
 `ID` is the player's id.
 `start` and `stop` refers to the number of `Most Played Beatmaps` displayed on the profile.
 
@@ -38,13 +38,13 @@ If `Store JSON to Database` is checked, the program will :
 Otherwise, it only downloads and store the raw JSON files.
 ## Example:
 
-**user_id**:
+**user_id**:  
 ![ID](https://i.imgur.com/VhuVDSG.png)
 
-**index:**
+**index:**  
 ![index](https://i.imgur.com/9L2MyWi.png)
 
-Based on the information above, a straightforward way is to simply type in:
+Based on the information above, a straightforward way is to simply type in:  
 ![example](https://i.imgur.com/ebBVR6A.png)
 
 Each `.json` files contain a maximum of 100 songs. They are stored in `scrape_osu_songs/songs/<user_id>/`.
@@ -77,7 +77,7 @@ However, if the `Exact?` box is checked, it will only show you **exact** matches
 `Clear` simply clears the input field.
 
 ### The context menu (still being worked on):
-![Context manu](https://i.imgur.com/cBDoWxH.png)
+![Context manu](https://i.imgur.com/cBDoWxH.png)  
 You can right-click on any entry, gives you (currently) 1 handy option, `Preview`.
 
 `Preview` simply opens the browser and gives you a 10 second sample of the song.
