@@ -21,53 +21,47 @@ poetry install
 ```
 # How to Scrape and Save:
 *Uses SQLite3*
+1. Double click `./run_scrape.py`
+### The scrape GUI
+![scrape gui](https://i.imgur.com/x6OHJz0.png)
+`ID` is the player's id.
+`start` and `stop` refers to the number of `Most Played Beatmaps` displayed on the profile.
 
-**!!Navigate to `PROJECT_ROOT/scrape_osu_songs/` and create a folder named `songs`!!**
+If `Store JSON to Database` is checked, the program will :
+1. Download the `JSON` files
+2. Parse the `JSON` files and store **ONLY:**
+   - Artist
+   - Title
+   - Preview
+   - Source
 
-Scraping is a two step process:  
-In `./scrape_osu_songs/main.py`:
-```py
-if __name__ == "__main__":
-    save_song(user_id_int=user_id, index_start, index_stop)  # downloads from profile
-    parse_and_save()  # saves into .json files
-```
-`user_id` is the player's id.
-`index_start` and `index_stop` refers to the number of `Most Played Beatmaps` displayed on the profile.
-
+Otherwise, it only downloads and store the raw JSON files.
 ## Example:
 
-**user_id**:  
+**user_id**:
 ![ID](https://i.imgur.com/VhuVDSG.png)
 
-**index:**  
+**index:**
 ![index](https://i.imgur.com/9L2MyWi.png)
 
-Based on the information above, a straightforward way is to simply write:
-```py
-if __name__ == "__main__":
-    save_song(user_id_int=user_id, 0, 3900)  # start from 0 until 3900
-    parse_and_save()  # saves to sqlite3 database
-```
-`save_song()` downloads the songs and generates `.json` files containing the raw data.
+Based on the information above, a straightforward way is to simply type in:
+![example](https://i.imgur.com/ebBVR6A.png)
 
-Each .json files contain a maximum of 100 songs. They are stored in `scrape_osu_songs/songs/<user_id>/`.
+Each `.json` files contain a maximum of 100 songs. They are stored in `scrape_osu_songs/songs/<user_id>/`.
 
-As the path suggests, each `user_id_int` has its own folder containing the `.json` files.
-
-`parse_and_save()` is responsible for parsing the .json files and saving them to a database.
-
+As the path suggests, each `ID` has its own folder containing the `.json` files.
 
 # Viewing the Data:
 a simple GUI is provided to view and query the data.
-1. Double click `./run.py`
+1. Double click `./run_view.py`
 
-### The GUI
+### The view GUI
 ![GUI](https://i.imgur.com/JGVl5sc.png)
 ### How to use:
 1. Type in the `artist`, `title` or `source` (where the song originates from, e.g. SOUND VOLTEX) inside the input field.
-2. Choose what you want to seach for: `Artist`, `Title`, or `Source`
+2. Choose what you want to search for: `Artist`, `Title`, or `Source`
 3. Choose by what you want to sort the data with: `Artist` or `Title`.
-3. Press `Search` or simply `Enter`.
+4. Press `Search` or simply `Enter`.
 
 The words are kinda weird but let me explain.
 
@@ -83,7 +77,7 @@ However, if the `Exact?` box is checked, it will only show you **exact** matches
 `Clear` simply clears the input field.
 
 ### The context menu (still being worked on):
-![Context manu](https://i.imgur.com/cBDoWxH.png)  
+![Context manu](https://i.imgur.com/cBDoWxH.png)
 You can right-click on any entry, gives you (currently) 1 handy option, `Preview`.
 
 `Preview` simply opens the browser and gives you a 10 second sample of the song.
