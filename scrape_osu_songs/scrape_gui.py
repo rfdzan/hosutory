@@ -1,6 +1,8 @@
-import PySimpleGUI as sG
-import scrape
 from pathlib import Path
+
+import PySimpleGUI as sG
+
+import scrape
 
 
 def get_values(values: dict[str, str | bool]):
