@@ -13,6 +13,11 @@ HEADERS = PROJ_DIR.joinpath("headers.json")
 SONG_DIR = PROJ_DIR.joinpath("songs")
 
 
+def mkdir_songs() -> None:
+    if not Path(SONG_DIR).exists():
+        Path.mkdir(SONG_DIR)
+
+
 def make_request(user_id: str, offset: int) -> list[dict]:
     url = f"https://osu.ppy.sh/users/{user_id}/beatmapsets/most_played?limit=100&offset={offset}"
     with open(HEADERS) as file:
@@ -30,7 +35,8 @@ def make_request(user_id: str, offset: int) -> list[dict]:
                 sleep(1)
 
 
-def save_song(user_id_int: int, start: int, stop: int) -> None:
+def save_song(user_id_int: int, start: int, stop: int) -> Generator[int, None, None]:
+    mkdir_songs()
     user_id = str(user_id_int)
     user_id_folder = SONG_DIR.joinpath(user_id)
     if not Path(user_id_folder).exists():
@@ -41,9 +47,11 @@ def save_song(user_id_int: int, start: int, stop: int) -> None:
             user_id_folder.joinpath(f"songs{int(offset / 100)}.json"), "w"
         ) as file:
             json.dump(response, file)
+        yield offset
 
 
 def parse(user_id: str) -> Generator[dict[str, str], None, None]:
+    mkdir_songs()
     user_id_folder = SONG_DIR.joinpath(user_id)
     for file in tqdm(Path(user_id_folder).iterdir()):
         with open(user_id_folder.joinpath(file), encoding="utf-8") as file:
@@ -67,11 +75,8 @@ def store_songs(user_id: int) -> None:
     insert_into_db(complete_data)
 
 
-def parse_and_save():
-    for filename in Path(SONG_DIR).iterdir():
+def parse_and_save() -> Generator[int, None, None]:
+    mkdir_songs()
+    for idx, filename in enumerate(Path(SONG_DIR).iterdir()):
         store_songs(filename.name)
-
-
-if __name__ == "__main__":
-    parse_and_save()
-    pass
+        yield idx
