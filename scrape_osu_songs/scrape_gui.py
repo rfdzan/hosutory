@@ -16,9 +16,16 @@ def get_values(values: dict[str, str | bool]):
 def process_request(values: dict[str, str | bool], window):
     user_id, idx_start, idx_stop, store_db = get_values(values)
     window["-PROGTXT-"].update(value=f"Downloading {int(int(idx_stop)//100)} files")
-    for value in scrape.save_song(int(user_id), int(idx_start), int(idx_stop)):
-        window["-PROGRESS-"].update(current_count=value, max=idx_stop)
-    if store_db:
+    try:
+        for value in scrape.save_song(
+            abs(int(user_id)), abs(int(idx_start)), abs(int(idx_stop))
+        ):
+            window["-PROGRESS-"].update(current_count=value, max=idx_stop)
+        db_allowed = True
+    except ValueError as err:
+        sG.popup(err, title="Error")
+        db_allowed = False
+    if store_db and db_allowed:
         num_file = [filepath for filepath in Path(scrape.SONG_DIR).iterdir()]
         window["-PROGTXTDB-"].update(value="Saving to database...")
         for value in scrape.parse_and_save():
@@ -29,16 +36,19 @@ def process_request(values: dict[str, str | bool], window):
 def sanitize_input(values: dict[str, str | bool]):
     user_id, idx_start, idx_stop, store_db = get_values(values)
     try:
-        user_id = int(user_id)
+        _ = int(user_id)
         idx_start = int(idx_start)
         idx_stop = int(idx_stop)
-        return True
     except (TypeError, ValueError):
         sG.Popup(
             "All input fields only accept integers and must be populated.",
             title="Warning",
         )
         return False
+    if idx_start > idx_stop:
+        sG.Popup("'start' MUST be smaller than 'stop'", title="Warning")
+        return False
+    return True
 
 
 def main():
@@ -76,8 +86,6 @@ def main():
 
     while True:
         event, values = window.read()
-        print(event)
-        print(values)
         if event == sG.WIN_CLOSED:
             break
         if event == "Start":
