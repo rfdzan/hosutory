@@ -4,7 +4,6 @@ from pathlib import Path, PurePath
 from time import sleep
 
 import httpx
-from tqdm import tqdm
 
 from db.sql_query import insert_into_db
 
@@ -18,7 +17,7 @@ def mkdir_songs() -> None:
         Path.mkdir(SONG_DIR)
 
 
-def make_request(user_id: str, offset: int) -> list[dict]:
+def make_request(user_id: str, offset: int, max: int) -> list[dict]:
     url = f"https://osu.ppy.sh/users/{user_id}/beatmapsets/most_played?limit=100&offset={offset}"
     with open(HEADERS) as file:
         header = json.load(file)
@@ -29,13 +28,17 @@ def make_request(user_id: str, offset: int) -> list[dict]:
                 if data == "error":
                     raise ValueError(f"No data for ID: {user_id}")
                 return response.json()
-        except (httpx.TimeoutException, json.decoder.JSONDecodeError):
+        except httpx.HTTPError:
             for i in range(30, 0):
                 print(
                     f"encountered an error in make_request(), retrying in {i} seconds",
                     end="\r",
                 )
                 sleep(1)
+        except json.decoder.JSONDecodeError:
+            if offset == max:
+                break
+            continue
 
 
 def save_song(user_id_int: int, start: int, stop: int) -> Generator[int, None, None]:
@@ -44,8 +47,8 @@ def save_song(user_id_int: int, start: int, stop: int) -> Generator[int, None, N
     user_id_folder = SONG_DIR.joinpath(user_id)
     if not Path(user_id_folder).exists():
         Path(user_id_folder).mkdir()
-    for offset in tqdm(range(start, stop + 100, 100)):
-        response = make_request(user_id, offset)
+    for offset in range(start, stop + 100, 100):
+        response = make_request(user_id, offset, max=stop)
         with open(
             user_id_folder.joinpath(f"songs{int(offset / 100)}.json"), "w"
         ) as file:
@@ -56,11 +59,16 @@ def save_song(user_id_int: int, start: int, stop: int) -> Generator[int, None, N
 def parse(user_id: str) -> Generator[dict[str, str], None, None]:
     mkdir_songs()
     user_id_folder = SONG_DIR.joinpath(user_id)
-    for file in tqdm(Path(user_id_folder).iterdir()):
+    for file in Path(user_id_folder).iterdir():
         with open(user_id_folder.joinpath(file), encoding="utf-8") as file:
             song = json.load(file)
+        if song is None:
+            continue
         for item in song:
-            beatmapset = item.get("beatmapset")
+            try:
+                beatmapset = item.get("beatmapset")
+            except AttributeError:
+                continue
             artist = beatmapset.get("artist")
             title = beatmapset.get("title")
             preview = beatmapset.get("preview_url")
