@@ -35,7 +35,7 @@ If `Store JSON to Database` is checked, the program will :
    - Preview
    - Source
 
-Otherwise, it only downloads and store the raw JSON files.
+Otherwise, it only downloads and store the raw JSON files. **They also do not show up in view GUI.**
 ## Example:
 
 **user_id**:  
@@ -56,6 +56,8 @@ a simple GUI is provided to view and query the data.
 1. Double click `./run_view.py`
 
 ### The view GUI
+Reads from the database.  
+
 ![GUI](https://i.imgur.com/JGVl5sc.png)
 ### How to use:
 1. Type in the `artist`, `title` or `source` (where the song originates from, e.g. SOUND VOLTEX) inside the input field.
