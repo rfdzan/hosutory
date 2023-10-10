@@ -1,8 +1,19 @@
 from pathlib import Path
 
 import PySimpleGUI as sG
+from threading import Thread
 
 import scrape
+
+
+def id_exists(values: dict[str, str | bool]):
+    user_id, _, _, _ = get_values(values)
+    try:
+        _ = scrape.make_request(user_id, 100, header=None)
+        return True
+    except ValueError as err:
+        sG.popup(err, title="Error")
+        return False
 
 
 def get_values(values: dict[str, str | bool]):
@@ -15,17 +26,17 @@ def get_values(values: dict[str, str | bool]):
 
 def process_request(values: dict[str, str | bool], window):
     user_id, idx_start, idx_stop, store_db = get_values(values)
-    window["-PROGTXT-"].update(value=f"Downloading {int(int(idx_stop)//100)} files")
-    try:
-        for value in scrape.save_song(
-            abs(int(user_id)), abs(int(idx_start)), abs(int(idx_stop))
-        ):
-            window["-PROGRESS-"].update(current_count=value, max=idx_stop)
-        db_allowed = True
-    except ValueError as err:
-        sG.popup(err, title="Error")
-        db_allowed = False
-    if store_db and db_allowed:
+
+    for value in scrape.save_song(
+        abs(int(user_id)), abs(int(idx_start)), abs(int(idx_stop))
+    ):
+        window["-PROGTXT-"].update(
+            value=f"Downloading {int(value // 100)} "
+            f"of {int(int(idx_stop) // 100)} files"
+        )
+        window["-PROGRESS-"].update(current_count=value, max=idx_stop)
+    window["-PROGTXT-"].update(value="Finished downloading files!")
+    if store_db:
         num_file = [filepath for filepath in Path(scrape.SONG_DIR).iterdir()]
         window["-PROGTXTDB-"].update(value="Saving to database...")
         for value in scrape.parse_and_save():
@@ -90,7 +101,12 @@ def main():
             break
         if event == "Start":
             if sanitize_input(values):
-                process_request(values, window)
+                check = id_exists(values)
+                if check:
+                    task = Thread(
+                        group=None, target=process_request, args=(values, window)
+                    )
+                    task.start()
         window["-PROGTXT-"].update("No downloads.")
         window["-PROGTXTDB-"].update("No database task.")
         window["-PROGRESS-"].update(current_count=0)

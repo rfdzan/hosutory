@@ -2,7 +2,7 @@ import json
 from collections.abc import Generator
 from pathlib import Path, PurePath
 from time import sleep
-
+from typing import Any
 import httpx
 
 from db.sql_query import insert_into_db
@@ -17,17 +17,29 @@ def mkdir_songs() -> None:
         Path.mkdir(SONG_DIR)
 
 
-def make_request(user_id: str, offset: int, max: int) -> list[dict]:
-    url = f"https://osu.ppy.sh/users/{user_id}/beatmapsets/most_played?limit=100&offset={offset}"
+def get_header() -> dict[str, str]:
     with open(HEADERS) as file:
         header = json.load(file)
+    return header
+
+
+def make_request(user_id: str, offset: int, header: dict[str, str]):
+    url = f"https://osu.ppy.sh/users/{user_id}/beatmapsets/most_played?limit=100&offset={offset}"
+    if header is None:
+        header = get_header()
+    response = httpx.get(url, headers=header)
+    for data in response.json():
+        if data == "error":
+            raise ValueError(f"No data for ID: {user_id}")
+        return response.json()
+
+
+def start_request(user_id: str, offset: int, max: int) -> list[dict[str, Any]]:
+    header = get_header()
     while True:
         try:
-            response = httpx.get(url, headers=header)
-            for data in response.json():
-                if data == "error":
-                    raise ValueError(f"No data for ID: {user_id}")
-                return response.json()
+            response = make_request(user_id, offset, header)
+            return response
         except httpx.HTTPError:
             for i in range(30, 0):
                 print(
@@ -36,7 +48,7 @@ def make_request(user_id: str, offset: int, max: int) -> list[dict]:
                 )
                 sleep(1)
         except json.decoder.JSONDecodeError:
-            if offset == max:
+            if offset == max + 100:
                 break
             continue
 
@@ -48,7 +60,7 @@ def save_song(user_id_int: int, start: int, stop: int) -> Generator[int, None, N
     if not Path(user_id_folder).exists():
         Path(user_id_folder).mkdir()
     for offset in range(start, stop + 100, 100):
-        response = make_request(user_id, offset, max=stop)
+        response = start_request(user_id, offset, max=stop)
         with open(
             user_id_folder.joinpath(f"songs{int(offset / 100)}.json"), "w"
         ) as file:
