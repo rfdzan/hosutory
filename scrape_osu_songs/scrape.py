@@ -3,6 +3,7 @@ from collections.abc import Generator
 from pathlib import Path, PurePath
 from time import sleep
 from typing import Any
+
 import httpx
 
 from db.sql_query import insert_into_db
