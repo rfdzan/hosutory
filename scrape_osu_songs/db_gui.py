@@ -40,10 +40,10 @@ def main():
 
         if isinstance(event, tuple):
             if event[0] == "-TABLE-":
-                index = event[2]
+                index = event[2]  # ('-TABLE-', '+CLICKED+', (row, col))
 
         if "index" in locals():
-            context_menu(event, result, index)
+            context_menu(event, result, index, window, values)
 
     window.close()
 

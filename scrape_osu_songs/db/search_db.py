@@ -30,13 +30,13 @@ def query_the_db(values: dict[str, str | bool]) -> Generator[list[str]]:
     like = values.get("-INPUT-")
     if values.get("-EXACT-"):
         q_select = (
-            f"SELECT artist, title, preview, source FROM songs "
+            f"SELECT artist, title, source, favorite, id, preview FROM songs "
             f"WHERE {by} = :like ORDER BY {sort}"
         )
         like_query = like
     else:
         q_select = (
-            f"SELECT artist, title, preview, source FROM songs "
+            f"SELECT artist, title, source, favorite, id, preview FROM songs "
             f"WHERE {by} LIKE :like ORDER BY {sort}"
         )
         like_query = f"%{like}%"
@@ -45,4 +45,4 @@ def query_the_db(values: dict[str, str | bool]) -> Generator[list[str]]:
         cursor = conn.cursor()
         cursor.execute(q_select, {"like": like_query})
         for data in cursor:
-            yield [data[0], data[1], data[3], f"https:{data[2]}"]
+            yield [data[0], data[1], data[2], data[3], data[4], f"https:{data[5]}"]

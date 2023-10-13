@@ -17,12 +17,18 @@ class LeftCol:
             auto_size_columns=False,
             vertical_scroll_only=False,
             justification="left",
-            headings=["artist", "title", "source"],
+            headings=["artist", "title", "source", "fav"],
             enable_click_events=True,
             right_click_selects=True,
             right_click_menu=[
                 "&Right",
-                ["Copy::rCopy", "Copy Munix::rMunix", "Preview::rPreview"],
+                [
+                    "Copy::rCopy",
+                    "Copy Munix::rMunix",
+                    "Mark as Favorite::markFav",
+                    "Remove from Favorite::delFav",
+                    "Preview::rPreview",
+                ],
             ],
             key="-TABLE-",
         )
