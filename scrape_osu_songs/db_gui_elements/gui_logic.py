@@ -23,7 +23,7 @@ def add_fave(event, fave_key, result_dbquery, table_index, window, values):
     id_num = result_dbquery[table_index[0]][4]
     data = {"favorite": mark, "id": id_num}
     update_fave(data)
-    _ = search(query_the_db, values, window)
+    _ = search(query_the_db, values, window)  # return value never updates context menu.
 
 
 def to_clipboard(event, result_dbquery, table_index):
