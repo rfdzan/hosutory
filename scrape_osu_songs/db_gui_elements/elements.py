@@ -48,6 +48,7 @@ class RightCol:
         sG.Text("Sort by:"),
         sG.Radio("Artist", 2, key="sort_artist"),
         sG.Radio("Title", 2, default=True, key="sort_title"),
+        sG.Radio("Favorite", 2, key="sort_favorite"),
     ]
     text_like = [sG.Text("Like:")]
     search_box = [sG.InputText("", key="-INPUT-")]

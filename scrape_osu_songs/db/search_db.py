@@ -20,7 +20,15 @@ def sanitize_input():
 
 
 def query_the_db(values: dict[str, str | bool]) -> Generator[list[str]]:
-    header = ("artist", "title", "preview", "source", "sort_artist", "sort_title")
+    header = (
+        "artist",
+        "title",
+        "preview",
+        "source",
+        "sort_artist",
+        "sort_title",
+        "sort_favorite",
+    )
     for key, value in values.items():
         if key in header:
             if value and "sort" in key:
@@ -29,11 +37,24 @@ def query_the_db(values: dict[str, str | bool]) -> Generator[list[str]]:
                 by = key
     like = values.get("-INPUT-")
     if values.get("-EXACT-"):
+        if sort == "favorite":
+            q_select = (
+                f"SELECT artist, title, source, favorite, id, preview FROM songs "
+                f"WHERE {by} = :like ORDER BY {sort} DESC"
+            )
+            like_query = like
+        else:
+            q_select = (
+                f"SELECT artist, title, source, favorite, id, preview FROM songs "
+                f"WHERE {by} = :like ORDER BY {sort}"
+            )
+            like_query = like
+    elif sort == "favorite":
         q_select = (
             f"SELECT artist, title, source, favorite, id, preview FROM songs "
-            f"WHERE {by} = :like ORDER BY {sort}"
+            f"WHERE {by} LIKE :like ORDER BY {sort} DESC"
         )
-        like_query = like
+        like_query = f"%{like}%"
     else:
         q_select = (
             f"SELECT artist, title, source, favorite, id, preview FROM songs "
