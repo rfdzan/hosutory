@@ -18,10 +18,11 @@ def create_tables() -> None:
     source TEXT
     )STRICT
     """
-
+    q_wal_mode = "PRAGMA journal_mode=wal"
     with connect() as conn:
         cursor = conn.cursor()
         cursor.execute(q_create_tables)
+        cursor.execute(q_wal_mode)
 
 
 def insert_into_db(data: list[dict]) -> None:
