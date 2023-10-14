@@ -28,9 +28,7 @@ class Logic:
         id_num = self.result[table_index[0]][4]
         data = {"favorite": mark, "id": id_num}
         update_fave(data)
-        self.search(
-            query_the_db, values, window
-        )  # return value never updates context menu.
+        self.search(query_the_db, values, window)
 
     def to_clipboard(self, event, table_index):
         copy_prefix = {"Copy::rCopy": "", "Copy Munix::rMunix": "+p "}
