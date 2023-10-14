@@ -53,7 +53,7 @@ class Logic:
             self.to_clipboard(event, table_index)
 
         if event == "Preview::rPreview":
-            self.preview_song(self.result, table_index)
+            self.preview_song(table_index)
 
         fave_key = ("Mark as Favorite::markFav", "Remove from Favorite::delFav")
         if event in fave_key:
