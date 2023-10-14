@@ -2,7 +2,7 @@ import PySimpleGUI as sG
 
 from db.search_db import query_the_db
 from db_gui_elements.elements import LeftCol, RightCol
-from db_gui_elements.gui_logic import context_menu, search
+from db_gui_elements.gui_logic import Logic
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
             sG.Col(layout_r, vertical_alignment="Top"),
         ]
     ]
-
+    logic = Logic()
     window = sG.Window("Search", layout)
 
     while True:
@@ -33,17 +33,17 @@ def main():
             break
 
         if event == "Search":
-            result = search(query_the_db, values, window)
+            logic.search(query_the_db, values, window)
 
         if event == "Clear":
             window["-INPUT-"].update(value="")
 
         if isinstance(event, tuple):
             if event[0] == "-TABLE-":
-                index = event[2]
+                index = event[2]  # ('-TABLE-', '+CLICKED+', (row, col))
 
         if "index" in locals():
-            context_menu(event, result, index)
+            logic.context_menu(event, index, window, values)
 
     window.close()
 
