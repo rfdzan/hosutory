@@ -1,8 +1,9 @@
 from subprocess import run
 from webbrowser import open
-from db.sql_query import update_fave
-from db.search_db import query_the_db
+
 import PySimpleGUI as sG
+from db.search_db import query_the_db
+from db.sql_query import update_fave
 
 
 class Logic:
