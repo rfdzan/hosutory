@@ -50,7 +50,7 @@ class Logic:
 
     def context_menu(self, event, table_index, window, values):
         if event in ("Copy::rCopy", "Copy Munix::rMunix"):
-            self.to_clipboard(event, self.result, table_index)
+            self.to_clipboard(event, table_index)
 
         if event == "Preview::rPreview":
             self.preview_song(self.result, table_index)
