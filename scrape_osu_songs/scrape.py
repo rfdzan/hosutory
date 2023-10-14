@@ -5,7 +5,6 @@ from time import sleep
 from typing import Any
 
 import httpx
-
 from db.sql_query import insert_into_db
 
 PROJ_DIR = PurePath(__file__).parents[0]

@@ -1,5 +1,4 @@
 import PySimpleGUI as sG
-
 from scrape import SONG_DIR, make_request, parse_and_save, save_song
 from scrape_gui_elements.elements import ScrapeGUI
 from scrape_gui_elements.gui_logic import main_logic

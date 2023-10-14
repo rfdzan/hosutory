@@ -1,8 +1,9 @@
 from subprocess import run
 from webbrowser import open
-from db.sql_query import update_fave
-from db.search_db import query_the_db
+
 import PySimpleGUI as sG
+from db.search_db import query_the_db
+from db.sql_query import update_fave
 
 
 class Logic:
@@ -50,10 +51,10 @@ class Logic:
 
     def context_menu(self, event, table_index, window, values):
         if event in ("Copy::rCopy", "Copy Munix::rMunix"):
-            self.to_clipboard(event, self.result, table_index)
+            self.to_clipboard(event, table_index)
 
         if event == "Preview::rPreview":
-            self.preview_song(self.result, table_index)
+            self.preview_song(table_index)
 
         fave_key = ("Mark as Favorite::markFav", "Remove from Favorite::delFav")
         if event in fave_key:
