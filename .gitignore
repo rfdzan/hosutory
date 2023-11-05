@@ -5,7 +5,7 @@ __pycache__/
 .idea/
 scrape_osu_songs/songs/
 .ruff_cache/
-
+*.json
 # C extensions
 *.so
 
