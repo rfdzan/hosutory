@@ -1,8 +1,7 @@
-from subprocess import run
 from webbrowser import open
 
-import PySimpleGUI as sG
 import pyperclip
+import PySimpleGUI as sG
 from db.search_db import query_the_db
 from db.sql_query import update_fave
 
