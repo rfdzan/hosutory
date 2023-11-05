@@ -2,6 +2,7 @@ from subprocess import run
 from webbrowser import open
 
 import PySimpleGUI as sG
+import pyperclip
 from db.search_db import query_the_db
 from db.sql_query import update_fave
 
@@ -38,7 +39,7 @@ class Logic:
                 f"{copy_prefix.get(event)}"
                 f"{self.result[table_index[0]][0]} {self.result[table_index[0]][1]}"
             )
-            run(["clip.exe"], input=to_copy.encode("utf-8"))
+            pyperclip.copy(to_copy)
         except UnboundLocalError:
             sG.popup("No track selected!")
 
