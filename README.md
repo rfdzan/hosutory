@@ -1,4 +1,5 @@
 # osu-song-history
+**clone `linux-compat`instead if you're on linux.**
 Pull songs from `Most Played Beatmaps` section of any osu player profile, given their player IDs.
 
 ![Most Played Beatmaps](https://i.imgur.com/TQPXeOk.png)
