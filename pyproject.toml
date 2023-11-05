@@ -33,6 +33,7 @@ dependencies = [
     "tabulate<1.0.0,>=0.9.0",
     "pysimplegui<5.0.0,>=4.60.5",
     "pre-commit<4.0.0,>=3.4.0",
+    "pyperclip>=1.8.2",
 ]
 name = "scrape-osu-songs"
 version = "0.1.0"

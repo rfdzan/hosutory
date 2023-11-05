@@ -6,7 +6,7 @@ groups = ["default"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:e55ee66369fefc8ecf2d6d138808e259adc9182522ea1dd416fe2f99e5bfd67f"
+content_hash = "sha256:8a197a8675c5c9212b388317fa633a88e0e24e83df21dc990de256a590564c9f"
 
 [[package]]
 name = "anyio"
@@ -170,6 +170,14 @@ dependencies = [
 files = [
     {file = "pre_commit-3.5.0-py2.py3-none-any.whl", hash = "sha256:841dc9aef25daba9a0238cd27984041fa0467b4199fc4852e27950664919f660"},
     {file = "pre_commit-3.5.0.tar.gz", hash = "sha256:5804465c675b659b0862f07907f96295d490822a450c4c40e747d0b1c6ebcb32"},
+]
+
+[[package]]
+name = "pyperclip"
+version = "1.8.2"
+summary = "A cross-platform clipboard module for Python. (Only handles plain text for now.)"
+files = [
+    {file = "pyperclip-1.8.2.tar.gz", hash = "sha256:105254a8b04934f0bc84e9c24eb360a591aaf6535c9def5f29d92af107a9bf57"},
 ]
 
 [[package]]
